@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd packages/landing && npm ci --verbose && npm run build --verbose",
-  "installCommand": "npm ci --verbose",
+  "buildCommand": "pwd && ls -la && cd packages/landing && ls -la && npm config list && node -v && npm -v && npm ci && npm run build",
+  "installCommand": "npm ci",
   "outputDirectory": "packages/landing/out"
 } 
