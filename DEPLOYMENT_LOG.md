@@ -1,133 +1,126 @@
 # Deployment Log
 
-## Deep Analysis of Path Resolution Issue
+## Deep Analysis of Build Process Issues
 
-### Path Structure Analysis
-1. **Vercel's Path Resolution**
-   ```
-   /vercel/path0/packages/landing/packages/landing/out/routes-manifest.json
-   ```
-   - Base path: `/vercel/path0/`
-   - First package path: `packages/landing/`
-   - Duplicated path: `packages/landing/`
-   - Output directory: `out/`
-   - Target file: `routes-manifest.json`
+### Current Error Pattern
+```
+Command "cd packages/landing && npm ci && npm run build" exited with 1
+```
+This error persists across different configuration approaches, suggesting:
+1. Directory navigation issues
+2. Package installation problems
+3. Build context inconsistencies
 
-2. **Build Process Flow**
-   ```bash
-   1. npm ci                                 # Root installation
-   2. cd packages/landing                    # Navigate to package
-   3. npm ci && npm run build               # Local build
-   4. Vercel looks for output               # Path resolution
-   ```
+### Previous Attempts Summary
+1. JSON Configuration (Failed)
+2. UI-Based Settings (Failed)
+3. Directory Navigation (Failed)
+4. Workspace Commands (Failed)
 
-3. **Configuration Layers**
-   - Vercel Project Settings (UI-based)
-   - Next.js Configuration
-   - Build Process Configuration
-   - Directory Structure
+## New Approach: Build Script Strategy
 
-### Root Cause Analysis
-
-1. **Configuration Method Issues**
-   - JSON configuration causing validation errors
-   - Command-line navigation failing
-   - Path resolution inconsistencies
-
-2. **Build Process Challenges**
-   - Directory navigation unreliable
-   - Installation context issues
-   - Output path resolution problems
-
-3. **Monorepo Complexity**
-   - Multiple package locations
-   - Nested directory structure
-   - Build context management
-
-## Attempted Solutions
-
-### Attempt 14 - Explicit Path Resolution
+### Attempt 16 - Custom Build Script (Current)
 - **Changes Made:**
-  - Removed invalid `workspaceRoot` property
-  - Kept direct directory navigation
-  - Using full relative path for output
-- **Error:** Command "cd packages/landing && npm ci && npm run build" exited with 1
-- **Analysis:** Directory navigation and build commands still failing
-
-### Attempt 15 - UI-Based Configuration (Current)
-- **Changes Made:**
-  - Removed vercel.json completely
-  - Moving configuration to Vercel UI
-  - Using project settings for path configuration
+  - Creating dedicated build script
+  - Handling dependencies explicitly
+  - Managing build context carefully
 - **Status:** In Progress
-- **Reasoning:** 
-  1. UI configuration is more reliable than JSON
-  2. Project settings handle monorepo better
-  3. Avoiding command-line navigation issues
+- **Reasoning:**
+  1. Full control over build process
+  2. Explicit error handling
+  3. Clear build steps
 
-## Required UI Settings
-1. **Root Directory**
-   ```
-   packages/landing
-   ```
+### Implementation Steps
+1. **Create Build Script**
+   ```bash
+   # packages/landing/build.sh
+   #!/bin/bash
+   set -e  # Exit on error
 
-2. **Build Command**
-   ```
-   npm run build
-   ```
+   echo "Starting build process..."
 
-3. **Output Directory**
-   ```
-   .next
-   ```
+   # Check if we're in the right directory
+   if [ ! -f "package.json" ]; then
+     echo "Error: package.json not found"
+     exit 1
+   fi
 
-4. **Install Command**
-   ```
+   # Clean install
+   echo "Installing dependencies..."
+   rm -rf node_modules
+   rm -rf .next
    npm ci
+
+   # Build
+   echo "Building Next.js application..."
+   npm run build
+
+   # Verify output
+   if [ ! -d ".next" ]; then
+     echo "Error: Build output not found"
+     exit 1
+   fi
+
+   echo "Build completed successfully"
    ```
 
-## Technical Insights
-1. **UI vs JSON Configuration**
-   - UI settings take precedence
-   - More reliable path handling
-   - Better monorepo support
+2. **Required Vercel Settings**
+   ```
+   Root Directory: packages/landing
+   Build Command: bash ./build.sh
+   Output Directory: .next
+   Install Command: true  # Skip default install
+   ```
 
-2. **Project Structure**
-   - Root directory setting handles navigation
-   - Simpler build commands possible
-   - Clearer output path resolution
+### Technical Details
+1. **Build Script Features**
+   - Explicit error checking
+   - Clean installation
+   - Build verification
+   - Detailed logging
 
-3. **Build Process**
-   - Installation in correct context
-   - Build in package directory
-   - Output relative to package root
+2. **Environment Management**
+   - Working directory verification
+   - Dependency cleanup
+   - Output validation
+
+3. **Error Handling**
+   - Exit on any error (`set -e`)
+   - Directory validation
+   - Build output verification
 
 ## Next Steps if Current Attempt Fails
-1. **Custom Build Script**
+1. **Dependency Analysis**
+   - Review package.json
+   - Check for circular dependencies
+   - Validate peer dependencies
+
+2. **Build Environment Debug**
    ```bash
-   # Create build.sh in packages/landing
-   #!/bin/bash
-   npm ci
-   npm run build
+   # Add to build script
+   env | sort
+   pwd
+   ls -la
+   npm config list
    ```
 
-2. **Repository Restructure**
-   - Move landing to separate branch
-   - Deploy from dedicated branch
-   - Simplify directory structure
+3. **Alternative Deployment**
+   - Static export (`next export`)
+   - Manual file copying
+   - Separate package deployment
 
-3. **Framework Settings**
-   - Review Next.js monorepo examples
-   - Check Turborepo deployment guides
-   - Consider alternative build solutions
+## Monitoring Strategy
+1. **Build Logs**
+   - Watch for npm errors
+   - Check directory context
+   - Monitor dependency installation
 
-## UI Configuration Steps
-1. Go to Project Settings in Vercel
-2. Navigate to Build & Development Settings
-3. Configure:
-   - Root Directory: `packages/landing`
-   - Build Command: `npm run build`
-   - Output Directory: `.next`
-   - Install Command: `npm ci`
-4. Save changes
-5. Redeploy project 
+2. **Output Verification**
+   - Validate .next directory
+   - Check file permissions
+   - Verify build artifacts
+
+3. **Error Patterns**
+   - Track command failures
+   - Monitor exit codes
+   - Log environment state 
