@@ -5,8 +5,8 @@
 ### Common Error Patterns
 1. **Directory Navigation Issues**
    - Multiple failures with `cd packages/landing`
-   - Appears in attempts 3, 6, 7, 8
-   - Suggests possible workspace structure issues
+   - Appears in attempts 3, 6, 7, 8, 9
+   - Consistent failure pattern suggests fundamental issue with directory structure
 
 2. **Package Installation Failures**
    - Both `npm install` and `npm ci` failing
@@ -14,9 +14,9 @@
    - Suggests possible npm configuration or permission issues
 
 3. **Build Command Failures**
-   - Build commands fail even when install seems to work
-   - Consistent across different Next.js output modes
-   - Suggests possible dependency or configuration conflicts
+   - Build commands fail even with diagnostic steps
+   - Fails before environment information can be logged
+   - Points to possible permission or path issues in Vercel environment
 
 ### Environment Context
 - Platform: Vercel
@@ -26,66 +26,56 @@
 
 ## Attempted Solutions
 
-### Attempt 8 - Separate Build Steps (Latest)
+### Attempt 9 - Environment Diagnostics (Latest)
+- **Changes Made:**
+  - Added environment inspection commands
+  - Included directory listing and npm configuration checks
+  - Attempted to gather Node.js and npm version information
+- **Error:** Command "pwd && ls -la && cd packages/landing && ls -la && npm config list && node -v && npm -v && npm ci && npm run build" exited with 1
+- **Root Cause Analysis:**
+  - Error occurs before any diagnostic information is output
+  - Suggests possible permission issues with command execution
+  - May indicate Vercel environment restrictions
+
+### Attempt 8 - Separate Build Steps
 - **Changes Made:**
   - Split build command into separate steps
   - Use npm ci with verbose logging
   - Changed output directory to `packages/landing/out`
 - **Error:** Command "cd packages/landing && npm ci --verbose && npm run build --verbose" exited with 1
-- **Root Cause Analysis:**
-  - Error occurs during the combined install and build step
-  - Verbose logging enabled but error details not showing
-  - Possible issue with directory access or npm cache
+- **Analysis:** Similar failure pattern, suggesting deeper structural issue
 
-### Attempt 7 - Static Export
-- **Changes Made:**
-  - Switch to static export mode
-  - Simplified build process
-- **Error:** Build command failed
-- **Analysis:** Similar pattern to other failures, suggesting directory access might be the core issue
+[Previous attempts removed for brevity]
 
-### Attempt 6 - Next.js Standalone
-- **Changes Made:**
-  - Used standalone output
-  - Modified build directory structure
-- **Error:** npm install failed
-- **Analysis:** Installation failing before build step, pointing to environment setup issues
+## New Pattern Identified
+- All attempts to use `cd packages/landing` fail immediately
+- No diagnostic information is being output
+- Suggests possible Vercel environment restrictions on directory navigation
 
-[Previous attempts removed for brevity but following same pattern analysis]
+## Next Attempt (10) - Simplified Root-Level Build
+### Planned Changes:
+1. Move build process to root level
+2. Update package.json scripts to handle subpackage building
+3. Remove directory navigation from Vercel config
+4. Use relative paths in build commands
 
-## Diagnostic Steps Needed
-1. **Verify Directory Structure**
-   ```bash
-   ls -la /vercel/path0/packages/landing
-   ```
+### Implementation Plan:
+1. Update root package.json build script
+2. Modify Next.js config to handle relative paths
+3. Simplify Vercel configuration
+4. Add build-time path resolution
 
-2. **Check npm Configuration**
-   ```bash
-   npm config list
-   ```
+## Future Alternatives if Attempt 10 Fails
+1. **Docker-Based Approach**
+   - Use custom Docker image
+   - Pre-configure build environment
+   - Handle directory structure in container
 
-3. **Verify Node.js Environment**
-   ```bash
-   node -v
-   npm -v
-   ```
+2. **Split Repository Approach**
+   - Deploy landing package separately
+   - Remove monorepo complexity for deployment
 
-## Next Solutions to Try
-1. **Environment-First Approach**
-   - Add pre-build script to verify environment
-   - Log directory structure and permissions
-   - Check npm cache and configuration
-
-2. **Simplified Build Process**
-   - Remove workspace complexity
-   - Build directly in root directory
-   - Use basic Next.js configuration
-
-3. **Alternative Package Manager**
-   - Try using pnpm or yarn
-   - Test with package manager's monorepo features
-
-4. **Build Pipeline Modification**
-   - Add explicit build steps
-   - Include environment preparation
-   - Handle workspace linking separately 
+3. **Custom Build Script**
+   - Create shell script for build process
+   - Handle path resolution explicitly
+   - Add error handling and logging 
