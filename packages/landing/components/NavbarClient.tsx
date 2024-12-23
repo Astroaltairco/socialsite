@@ -175,12 +175,6 @@ export default function NavbarClient() {
 
         <div className="flex-1 hidden md:flex items-center justify-center space-x-10">
           <a
-            href="#"
-            className="text-sm font-bold text-white/70 hover:text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 transition-all"
-          >
-            Docs
-          </a>
-          <a
             href="#new-era"
             onClick={(e) => {
               e.preventDefault()
