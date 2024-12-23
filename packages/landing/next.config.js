@@ -9,7 +9,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  distDir: '.next'
+  distDir: '.next',
+  basePath: '',
+  trailingSlash: false,
+  assetPrefix: ''
 }
 
 module.exports = nextConfig

@@ -8,5 +8,11 @@
         "rootDirectory": "packages/landing"
       }
     }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/packages/landing/$1"
+    }
   ]
 } 
