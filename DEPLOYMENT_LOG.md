@@ -1,7 +1,7 @@
 # Deployment Log
 
 ## Current Issue
-Error: Command "cd packages/landing && npm install" exited with 1
+Error: Command "cd packages/landing && npm install && npm run build" exited with 1
 
 ## Attempted Solutions
 
@@ -52,11 +52,20 @@ Error: Command "cd packages/landing && npm install" exited with 1
   - Update build command to include export step
   - Change output directory to static export path
   - Use simpler install command
+- **Result:** Failed with build command error
+- **Error Message:** Command "cd packages/landing && npm install && npm run build" exited with 1
+
+### Attempt 8 - Separate Build Steps
+- **Changes Made:**
+  - Split build command into separate steps
+  - Add explicit workspace setup
+  - Use npm ci instead of npm install for cleaner installs
+  - Add verbose logging to diagnose issues
 - **Status:** In Progress
-- **Reasoning:** Static export creates a more predictable output structure and removes server-side complexity
+- **Reasoning:** Breaking down the build process into smaller steps will help identify where exactly the build is failing
 
 ## Next Steps to Try
-1. If static export fails, try using project references in TypeScript
-2. Consider setting up a custom server configuration
+1. If separate steps fail, try using Docker-based deployment
+2. Consider using project references in TypeScript
 3. Look into using Turborepo's remote caching
-4. Investigate using Docker-based deployment 
+4. Try deploying just the landing package without monorepo structure 
