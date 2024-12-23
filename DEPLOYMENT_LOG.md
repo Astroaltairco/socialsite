@@ -18,10 +18,10 @@
    - Fails before environment information can be logged
    - Points to possible permission or path issues in Vercel environment
 
-4. **Workspace Script Resolution**
-   - Vercel attempts to run scripts using workspace syntax
-   - Direct script calls fail when not using workspace flags
-   - Indicates need for proper npm workspace command structure
+4. **Output Path Resolution**
+   - Vercel duplicates the package path in output directory
+   - Seeing paths like `packages/landing/packages/landing/out`
+   - Suggests misalignment between Next.js output and Vercel configuration
 
 ### Environment Context
 - Platform: Vercel
@@ -31,45 +31,43 @@
 
 ## Attempted Solutions
 
-### Attempt 10 - Root-Level Build (Latest)
-- **Changes Made:**
-  - Moved build process to root level
-  - Updated package.json scripts
-  - Simplified Vercel configuration
-- **Error:** Missing script: "build:landing" in workspace @social-staking/landing
-- **Root Cause Analysis:**
-  - Vercel is trying to execute commands using workspace syntax
-  - Our script was defined at root level but needed at workspace level
-  - Need to use proper npm workspace command flags
-
-### Attempt 11 - Workspace-Aware Build (Current)
+### Attempt 11 - Workspace-Aware Build
 - **Changes Made:**
   - Updated build command to use proper workspace syntax
   - Using `-w @social-staking/landing` flag
   - Keeping installation at root level
-- **Status:** In Progress
-- **Reasoning:** Aligning with npm workspace architecture and Vercel's execution model
+- **Error:** The file "/vercel/path0/packages/landing/packages/landing/out/routes-manifest.json" couldn't be found
+- **Root Cause Analysis:**
+  - Vercel is duplicating the package path in output directory
+  - Next.js output directory configuration might be conflicting with Vercel's path resolution
+  - Need to align Next.js and Vercel output paths
 
-[Previous attempts removed for brevity]
+### Attempt 12 - Output Path Alignment (Current)
+- **Changes Made:**
+  - Updating Next.js output configuration
+  - Adjusting Vercel output directory path
+  - Ensuring consistent path resolution
+- **Status:** In Progress
+- **Reasoning:** Aligning output paths between Next.js and Vercel to prevent path duplication
 
 ## Key Insights
-1. Vercel uses npm workspaces internally
-2. Commands need to be workspace-aware
-3. Root-level scripts don't automatically propagate to workspaces
-4. Need to use proper workspace flags for targeting specific packages
+1. Vercel duplicates package paths in output directory
+2. Next.js output configuration needs to align with Vercel's path resolution
+3. Need to consider the full path from Vercel's root perspective
+4. Output directory should be relative to the workspace root
 
 ## Next Steps if Current Attempt Fails
-1. **Verify Workspace Configuration**
-   - Check package names and versions
-   - Validate workspace definitions
-   - Ensure proper package resolution
+1. **Static Export Configuration**
+   - Switch to `next export`
+   - Use static HTML output
+   - Simplify deployment process
 
-2. **Alternative Build Approaches**
-   - Try using Turborepo's pipeline
-   - Consider using nx instead of Turborepo
-   - Explore Vercel's monorepo examples
+2. **Custom Build Script**
+   - Create a build script that handles path resolution
+   - Manually manage output directory structure
+   - Add validation steps
 
 3. **Split Repository Strategy**
    - Move landing package to separate repo
-   - Deploy independently
-   - Remove workspace complexity 
+   - Remove monorepo complexity
+   - Use standard Next.js deployment 

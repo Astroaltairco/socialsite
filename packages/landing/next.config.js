@@ -10,11 +10,11 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   output: 'export',
-  distDir: '.next',
+  distDir: 'out',
   images: {
     unoptimized: true,
   },
-  basePath: '',
+  basePath: ''
 }
 
 module.exports = nextConfig
