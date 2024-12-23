@@ -1,5 +1,5 @@
 {
-  "buildCommand": "yarn install && yarn build",
-  "installCommand": "yarn install",
-  "outputDirectory": ".next"
+  "buildCommand": "cd packages/landing && npm install && NODE_OPTIONS='--max-old-space-size=3072' npm run build",
+  "installCommand": "cd packages/landing && npm install",
+  "outputDirectory": "packages/landing/.next"
 } 
