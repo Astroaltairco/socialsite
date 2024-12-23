@@ -9,12 +9,11 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  output: 'export',
-  distDir: 'out',
+  output: 'standalone',
+  distDir: '.next',
   images: {
-    unoptimized: true,
-  },
-  basePath: ''
+    unoptimized: true
+  }
 }
 
 module.exports = nextConfig
