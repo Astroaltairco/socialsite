@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd packages/landing && npm install && NODE_OPTIONS='--max-old-space-size=3072' npm run build",
-  "installCommand": "cd packages/landing && npm install",
-  "outputDirectory": "packages/landing/.next/standalone/packages/landing"
+  "buildCommand": "cd packages/landing && npm install && npm run build",
+  "installCommand": "npm install",
+  "outputDirectory": "packages/landing/out"
 } 

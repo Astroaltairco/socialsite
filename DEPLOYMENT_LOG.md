@@ -1,7 +1,7 @@
 # Deployment Log
 
 ## Current Issue
-Error: The file "/vercel/path0/packages/landing/packages/landing/.next/routes-manifest.json" couldn't be found
+Error: Command "cd packages/landing && npm install" exited with 1
 
 ## Attempted Solutions
 
@@ -43,11 +43,20 @@ Error: The file "/vercel/path0/packages/landing/packages/landing/.next/routes-ma
   - Set explicit `basePath`
   - Updated Vercel output directory to use standalone build
   - Returned to using direct package directory navigation
+- **Result:** Failed with npm install command error
+- **Error Message:** Command "cd packages/landing && npm install" exited with 1
+
+### Attempt 7 - Static Export
+- **Changes Made:**
+  - Switch to static export mode in Next.js
+  - Update build command to include export step
+  - Change output directory to static export path
+  - Use simpler install command
 - **Status:** In Progress
-- **Reasoning:** Using Next.js standalone output should provide a more predictable build structure
+- **Reasoning:** Static export creates a more predictable output structure and removes server-side complexity
 
 ## Next Steps to Try
-1. If current attempt fails, try using Next.js static export
+1. If static export fails, try using project references in TypeScript
 2. Consider setting up a custom server configuration
-3. Investigate using project references in TypeScript
-4. Look into using Turborepo's remote caching 
+3. Look into using Turborepo's remote caching
+4. Investigate using Docker-based deployment 
