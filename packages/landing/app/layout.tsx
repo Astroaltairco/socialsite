@@ -5,8 +5,8 @@ import '../styles/globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Social Staking | Empower Your Social Tokens',
-  description: 'Revolutionize your social tokens with our next-gen staking platform. Join the future of social finance.',
+  title: 'Social Staking | The New Attention Economy',
+  description: 'Revolutionize your social tokens with our next-gen staking platform. Join the future of SocialFi.',
   icons: {
     icon: [
       {
