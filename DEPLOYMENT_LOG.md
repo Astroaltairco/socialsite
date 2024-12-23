@@ -22,84 +22,112 @@
    ```
 
 3. **Configuration Layers**
-   - Vercel Configuration (Limited by schema)
+   - Vercel Project Settings (UI-based)
    - Next.js Configuration
    - Build Process Configuration
    - Directory Structure
 
 ### Root Cause Analysis
 
-1. **Vercel Configuration Limitations**
-   - Schema validation restricts available options
-   - No built-in monorepo workspace support in config
-   - Need to work within Vercel's constraints
+1. **Configuration Method Issues**
+   - JSON configuration causing validation errors
+   - Command-line navigation failing
+   - Path resolution inconsistencies
 
-2. **Path Resolution Strategy**
-   - Must handle directory navigation in build command
-   - Output path must be relative to project root
-   - Cannot rely on workspace-aware features
+2. **Build Process Challenges**
+   - Directory navigation unreliable
+   - Installation context issues
+   - Output path resolution problems
 
-3. **Build Context**
-   - Build must run in package directory
-   - Output must be findable from project root
-   - Path resolution must be explicit
+3. **Monorepo Complexity**
+   - Multiple package locations
+   - Nested directory structure
+   - Build context management
 
 ## Attempted Solutions
 
-### Attempt 13 - Workspace Root Configuration
-- **Changes Made:**
-  - Added explicit `workspaceRoot` in Vercel config
-  - Changed to direct directory navigation
-  - Simplified output path resolution
-- **Error:** Schema validation failed - invalid property 'workspaceRoot'
-- **Analysis:** Vercel's configuration schema is more restrictive than documented
-
-### Attempt 14 - Explicit Path Resolution (Current)
+### Attempt 14 - Explicit Path Resolution
 - **Changes Made:**
   - Removed invalid `workspaceRoot` property
   - Kept direct directory navigation
   - Using full relative path for output
-  - Simplified configuration to match schema
+- **Error:** Command "cd packages/landing && npm ci && npm run build" exited with 1
+- **Analysis:** Directory navigation and build commands still failing
+
+### Attempt 15 - UI-Based Configuration (Current)
+- **Changes Made:**
+  - Removed vercel.json completely
+  - Moving configuration to Vercel UI
+  - Using project settings for path configuration
 - **Status:** In Progress
 - **Reasoning:** 
-  1. Working within Vercel's schema constraints
-  2. Using explicit paths instead of workspace features
-  3. Maintaining build context through direct navigation
+  1. UI configuration is more reliable than JSON
+  2. Project settings handle monorepo better
+  3. Avoiding command-line navigation issues
 
-## Technical Insights
-1. **Vercel Configuration Constraints**
-   - Limited set of valid properties
-   - No built-in monorepo support in config
-   - Must use project settings for advanced features
-
-2. **Path Resolution Requirements**
-   - All paths must be relative to project root
-   - Directory navigation must be handled in commands
-   - Output path must be explicitly specified
-
-3. **Build Strategy**
-   - Navigate to package directory first
-   - Run installation and build locally
-   - Output to path that Vercel can find
-
-## Next Steps if Current Attempt Fails
-1. **Project Settings Approach**
-   - Configure through Vercel's UI
-   - Set root directory in project settings
-   - Remove vercel.json entirely
-
-2. **Build Script Strategy**
-   ```bash
-   # Create build.sh
-   #!/bin/bash
-   cd packages/landing
-   npm ci
-   npm run build
-   mkdir -p ../../out
-   cp -r out/* ../../out/
+## Required UI Settings
+1. **Root Directory**
+   ```
+   packages/landing
    ```
 
-3. **Alternative Structure**
-   - Move landing to repository root
-   - Keep other packages in subdirectory
-   - Use standard Next.js deployment 
+2. **Build Command**
+   ```
+   npm run build
+   ```
+
+3. **Output Directory**
+   ```
+   .next
+   ```
+
+4. **Install Command**
+   ```
+   npm ci
+   ```
+
+## Technical Insights
+1. **UI vs JSON Configuration**
+   - UI settings take precedence
+   - More reliable path handling
+   - Better monorepo support
+
+2. **Project Structure**
+   - Root directory setting handles navigation
+   - Simpler build commands possible
+   - Clearer output path resolution
+
+3. **Build Process**
+   - Installation in correct context
+   - Build in package directory
+   - Output relative to package root
+
+## Next Steps if Current Attempt Fails
+1. **Custom Build Script**
+   ```bash
+   # Create build.sh in packages/landing
+   #!/bin/bash
+   npm ci
+   npm run build
+   ```
+
+2. **Repository Restructure**
+   - Move landing to separate branch
+   - Deploy from dedicated branch
+   - Simplify directory structure
+
+3. **Framework Settings**
+   - Review Next.js monorepo examples
+   - Check Turborepo deployment guides
+   - Consider alternative build solutions
+
+## UI Configuration Steps
+1. Go to Project Settings in Vercel
+2. Navigate to Build & Development Settings
+3. Configure:
+   - Root Directory: `packages/landing`
+   - Build Command: `npm run build`
+   - Output Directory: `.next`
+   - Install Command: `npm ci`
+4. Save changes
+5. Redeploy project 
