@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build:landing",
+  "buildCommand": "npm ci && npm run build -w @social-staking/landing",
   "installCommand": "npm ci",
   "outputDirectory": "packages/landing/out"
 } 

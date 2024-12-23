@@ -18,6 +18,11 @@
    - Fails before environment information can be logged
    - Points to possible permission or path issues in Vercel environment
 
+4. **Workspace Script Resolution**
+   - Vercel attempts to run scripts using workspace syntax
+   - Direct script calls fail when not using workspace flags
+   - Indicates need for proper npm workspace command structure
+
 ### Environment Context
 - Platform: Vercel
 - Build Environment: Node.js
@@ -26,56 +31,45 @@
 
 ## Attempted Solutions
 
-### Attempt 9 - Environment Diagnostics (Latest)
+### Attempt 10 - Root-Level Build (Latest)
 - **Changes Made:**
-  - Added environment inspection commands
-  - Included directory listing and npm configuration checks
-  - Attempted to gather Node.js and npm version information
-- **Error:** Command "pwd && ls -la && cd packages/landing && ls -la && npm config list && node -v && npm -v && npm ci && npm run build" exited with 1
+  - Moved build process to root level
+  - Updated package.json scripts
+  - Simplified Vercel configuration
+- **Error:** Missing script: "build:landing" in workspace @social-staking/landing
 - **Root Cause Analysis:**
-  - Error occurs before any diagnostic information is output
-  - Suggests possible permission issues with command execution
-  - May indicate Vercel environment restrictions
+  - Vercel is trying to execute commands using workspace syntax
+  - Our script was defined at root level but needed at workspace level
+  - Need to use proper npm workspace command flags
 
-### Attempt 8 - Separate Build Steps
+### Attempt 11 - Workspace-Aware Build (Current)
 - **Changes Made:**
-  - Split build command into separate steps
-  - Use npm ci with verbose logging
-  - Changed output directory to `packages/landing/out`
-- **Error:** Command "cd packages/landing && npm ci --verbose && npm run build --verbose" exited with 1
-- **Analysis:** Similar failure pattern, suggesting deeper structural issue
+  - Updated build command to use proper workspace syntax
+  - Using `-w @social-staking/landing` flag
+  - Keeping installation at root level
+- **Status:** In Progress
+- **Reasoning:** Aligning with npm workspace architecture and Vercel's execution model
 
 [Previous attempts removed for brevity]
 
-## New Pattern Identified
-- All attempts to use `cd packages/landing` fail immediately
-- No diagnostic information is being output
-- Suggests possible Vercel environment restrictions on directory navigation
+## Key Insights
+1. Vercel uses npm workspaces internally
+2. Commands need to be workspace-aware
+3. Root-level scripts don't automatically propagate to workspaces
+4. Need to use proper workspace flags for targeting specific packages
 
-## Next Attempt (10) - Simplified Root-Level Build
-### Planned Changes:
-1. Move build process to root level
-2. Update package.json scripts to handle subpackage building
-3. Remove directory navigation from Vercel config
-4. Use relative paths in build commands
+## Next Steps if Current Attempt Fails
+1. **Verify Workspace Configuration**
+   - Check package names and versions
+   - Validate workspace definitions
+   - Ensure proper package resolution
 
-### Implementation Plan:
-1. Update root package.json build script
-2. Modify Next.js config to handle relative paths
-3. Simplify Vercel configuration
-4. Add build-time path resolution
+2. **Alternative Build Approaches**
+   - Try using Turborepo's pipeline
+   - Consider using nx instead of Turborepo
+   - Explore Vercel's monorepo examples
 
-## Future Alternatives if Attempt 10 Fails
-1. **Docker-Based Approach**
-   - Use custom Docker image
-   - Pre-configure build environment
-   - Handle directory structure in container
-
-2. **Split Repository Approach**
-   - Deploy landing package separately
-   - Remove monorepo complexity for deployment
-
-3. **Custom Build Script**
-   - Create shell script for build process
-   - Handle path resolution explicitly
-   - Add error handling and logging 
+3. **Split Repository Strategy**
+   - Move landing package to separate repo
+   - Deploy independently
+   - Remove workspace complexity 
