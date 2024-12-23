@@ -12,8 +12,7 @@
     "test": "turbo run test",
     "clean": "turbo run clean",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "type-check": "turbo run type-check",
-    "prepare": "husky install"
+    "type-check": "turbo run type-check"
   },
   "devDependencies": {
     "@headlessui/tailwindcss": "^0.2.1",
@@ -35,7 +34,6 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
     "playwright": "^1.42.1",
     "postcss": "^8.4.49",
