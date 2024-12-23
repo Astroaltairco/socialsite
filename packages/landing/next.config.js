@@ -12,7 +12,10 @@ const nextConfig = {
   distDir: '.next',
   basePath: '',
   trailingSlash: false,
-  assetPrefix: ''
+  assetPrefix: '',
+  env: {
+    NEXT_PUBLIC_BASE_PATH: ''
+  }
 }
 
 module.exports = nextConfig
