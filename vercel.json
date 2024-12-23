@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "buildCommand": "cd packages/landing && npm install && npm run build",
-  "outputDirectory": "packages/landing/out",
-  "framework": "nextjs",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/"
+      "src": "packages/landing/package.json",
+      "use": "@vercel/next",
+      "config": {
+        "rootDirectory": "packages/landing"
+      }
     }
   ]
 } 
