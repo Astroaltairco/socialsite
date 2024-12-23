@@ -10,6 +10,8 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   distDir: '.next',
+  output: 'standalone',
+  basePath: '',
 }
 
 module.exports = nextConfig
