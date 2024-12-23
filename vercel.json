@@ -5,16 +5,18 @@
       "src": "packages/landing/package.json",
       "use": "@vercel/next",
       "config": {
-        "rootDirectory": "packages/landing",
-        "projectSettings": {
-          "framework": "nextjs",
-          "buildCommand": "npm run build",
-          "outputDirectory": ".next"
-        }
+        "rootDirectory": "packages/landing"
       }
     }
   ],
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/packages/landing/$1",
+      "continue": true
+    },
+    {
+      "handle": "filesystem"
+    }
   ]
 } 

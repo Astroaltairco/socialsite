@@ -9,6 +9,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  output: 'standalone',
   distDir: '.next',
   basePath: '',
   trailingSlash: false,
