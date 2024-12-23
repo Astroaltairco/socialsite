@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply h-full bg-gray-900;
+  }
+  
+  body {
+    @apply h-full;
+  }
+  
+  #root {
+    @apply h-full;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply rounded-lg bg-primary-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500;
+  }
+  
+  .btn-secondary {
+    @apply rounded-lg bg-white/10 px-4 py-2.5 text-sm font-semibold text-white hover:bg-white/20;
+  }
+  
+  .card {
+    @apply rounded-lg bg-gray-800/50 p-6 ring-1 ring-white/10;
+  }
+
+  .btn-stake {
+    @apply relative px-4 py-2.5 text-amber-400/60 bg-white/5 rounded-lg text-sm font-medium transition-all duration-500;
+  }
+
+  .btn-stake::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-purple-600/90 via-amber-500/90 to-purple-600/90 opacity-0 transition-opacity duration-300 z-[1];
+    background-size: 200% auto;
+    animation: gradient-shift 4s ease infinite;
+  }
+
+  .btn-stake:hover::before {
+    @apply opacity-100;
+  }
+
+  .btn-stake span {
+    @apply relative z-[2];
+  }
+
+  .btn-stake:hover {
+    @apply text-white scale-[1.02] font-semibold shadow-lg shadow-purple-500/20;
+  }
+}
+
+/* Dark mode overrides */
+.dark {
+  @apply text-gray-100;
+}
+
+.dark .btn-secondary {
+  @apply bg-gray-800 text-gray-100 border-gray-700 
+         hover:bg-gray-700;
+} 
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+} 
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-shift {
+  background-size: 200% auto;
+  animation: gradient-shift 4s ease infinite;
+}
+
+@keyframes golden-glow {
+  0%, 100% {
+    opacity: 0.2;
+    filter: brightness(1) blur(8px);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    filter: brightness(1.1) blur(10px);
+    transform: scale(1.01);
+  }
+}
+
+.animate-golden-glow {
+  animation: golden-glow 4s ease-in-out infinite;
+  will-change: opacity, filter, transform;
+} 

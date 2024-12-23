@@ -1,0 +1,64 @@
+{
+  "name": "social-staking",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "type-check": "turbo run type-check",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@headlessui/tailwindcss": "^0.2.1",
+    "@tailwindcss/forms": "^0.5.9",
+    "@testing-library/dom": "^10.4.0",
+    "@types/node": "^22.10.2",
+    "@types/puppeteer": "^5.4.7",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.53.0",
+    "eslint-config-next": "^15.1.2",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
+    "playwright": "^1.42.1",
+    "postcss": "^8.4.49",
+    "prettier": "^3.4.2",
+    "puppeteer": "^23.11.1",
+    "sharp": "^0.33.5",
+    "tailwindcss": "^3.4.17",
+    "ts-node": "^10.9.2",
+    "turbo": "^1.10.16",
+    "typescript": "^5.2.2",
+    "vite": "^5.4.11"
+  },
+  "packageManager": "yarn@4.5.3",
+  "dependencies": {
+    "chart.js": "^4.4.7"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}
