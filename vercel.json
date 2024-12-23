@@ -1,5 +1,13 @@
 {
-  "buildCommand": "cd packages/landing && npm ci && npm run build",
-  "installCommand": "npm ci",
-  "outputDirectory": "packages/landing/out"
+  "version": 2,
+  "builds": [
+    {
+      "src": "packages/landing/package.json",
+      "use": "@vercel/next",
+      "config": {
+        "installCommand": "npm install",
+        "buildCommand": "npm run build"
+      }
+    }
+  ]
 } 
