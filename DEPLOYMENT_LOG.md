@@ -1,126 +1,140 @@
 # Deployment Log
 
-## Deep Analysis of Build Process Issues
+## Root Cause Analysis (Updated)
 
-### Current Error Pattern
-```
-Command "cd packages/landing && npm ci && npm run build" exited with 1
-```
-This error persists across different configuration approaches, suggesting:
-1. Directory navigation issues
-2. Package installation problems
-3. Build context inconsistencies
+### Persistent Error Patterns
+1. **Directory Navigation**
+   ```
+   sh: line 1: cd: packages/landing: No such file or directory
+   ```
+   - Error occurs before repository is fully cloned
+   - Directory structure not ready when commands execute
+   - Navigation fails consistently across approaches
 
-### Previous Attempts Summary
-1. JSON Configuration (Failed)
-2. UI-Based Settings (Failed)
-3. Directory Navigation (Failed)
-4. Workspace Commands (Failed)
+2. **Build Context**
+   - Commands executing in wrong directory context
+   - Repository structure not fully available
+   - Timing issues with Vercel's build pipeline
 
-## New Approach: Build Script Strategy
+3. **Configuration Complexity**
+   - Multiple configuration layers (Vercel, Next.js, npm)
+   - Monorepo structure adding complexity
+   - Build process timing issues
 
-### Attempt 16 - Custom Build Script (Current)
+## Attempted Solutions
+
+### Attempt 16 - Custom Build Script
 - **Changes Made:**
-  - Creating dedicated build script
-  - Handling dependencies explicitly
-  - Managing build context carefully
+  - Created root-level build script
+  - Added extensive debugging
+  - Included directory verification
+- **Error:** Directory navigation still failing
+- **Analysis:** Script executes before repository clone completes
+
+### Attempt 17 - Vercel Monorepo Configuration (Current)
+- **Changes Made:**
+  - Using Vercel's native monorepo support
+  - Added `vercel.json` with project references
+  - Simplified Next.js configuration
+  ```json
+  {
+    "version": 2,
+    "builds": [
+      {
+        "src": "packages/landing/package.json",
+        "use": "@vercel/next"
+      }
+    ]
+  }
+  ```
 - **Status:** In Progress
 - **Reasoning:**
-  1. Full control over build process
-  2. Explicit error handling
-  3. Clear build steps
+  1. Let Vercel handle monorepo structure
+  2. Use official Next.js builder
+  3. Avoid manual directory navigation
 
-### Implementation Steps
-1. **Create Build Script**
-   ```bash
-   # packages/landing/build.sh
-   #!/bin/bash
-   set -e  # Exit on error
+## Technical Analysis
 
-   echo "Starting build process..."
-
-   # Check if we're in the right directory
-   if [ ! -f "package.json" ]; then
-     echo "Error: package.json not found"
-     exit 1
-   fi
-
-   # Clean install
-   echo "Installing dependencies..."
-   rm -rf node_modules
-   rm -rf .next
-   npm ci
-
-   # Build
-   echo "Building Next.js application..."
-   npm run build
-
-   # Verify output
-   if [ ! -d ".next" ]; then
-     echo "Error: Build output not found"
-     exit 1
-   fi
-
-   echo "Build completed successfully"
+### Build Pipeline Sequence
+1. **Vercel's Process**
+   ```
+   1. Initialize build environment
+   2. Clone repository
+   3. Execute build commands
+   4. Process vercel.json
+   5. Run framework-specific builders
    ```
 
-2. **Required Vercel Settings**
+2. **Timing Issues**
+   - Custom commands run too early
+   - Need to let Vercel handle directory structure
+   - Framework builders run after repository setup
+
+3. **Configuration Hierarchy**
    ```
-   Root Directory: packages/landing
-   Build Command: bash ./build.sh
-   Output Directory: .next
-   Install Command: true  # Skip default install
+   vercel.json (top level)
+   └── @vercel/next builder
+       └── next.config.js
+           └── package.json
    ```
 
-### Technical Details
-1. **Build Script Features**
-   - Explicit error checking
-   - Clean installation
-   - Build verification
-   - Detailed logging
+## Key Insights
+1. **Build Process**
+   - Manual navigation is unreliable
+   - Need to use Vercel's built-in tools
+   - Framework-specific builders are more reliable
 
-2. **Environment Management**
-   - Working directory verification
-   - Dependency cleanup
-   - Output validation
+2. **Monorepo Handling**
+   - Vercel has native monorepo support
+   - Project references are preferred
+   - Build commands should be framework-specific
 
-3. **Error Handling**
-   - Exit on any error (`set -e`)
-   - Directory validation
-   - Build output verification
+3. **Configuration Strategy**
+   - Minimize custom scripts
+   - Use official builders
+   - Let Vercel handle directory structure
 
 ## Next Steps if Current Attempt Fails
-1. **Dependency Analysis**
-   - Review package.json
-   - Check for circular dependencies
-   - Validate peer dependencies
 
-2. **Build Environment Debug**
-   ```bash
-   # Add to build script
-   env | sort
-   pwd
-   ls -la
-   npm config list
-   ```
+### Option 1: Project Settings Override
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "packages/landing/package.json",
+      "use": "@vercel/next",
+      "config": {
+        "installCommand": "npm install",
+        "buildCommand": "npm run build"
+      }
+    }
+  ]
+}
+```
 
-3. **Alternative Deployment**
-   - Static export (`next export`)
-   - Manual file copying
-   - Separate package deployment
+### Option 2: Framework-Specific Configuration
+1. Remove custom build scripts
+2. Use Next.js specific settings
+3. Configure through Vercel UI
 
-## Monitoring Strategy
+### Option 3: Repository Restructure
+1. Move landing to separate repository
+2. Use standard Next.js deployment
+3. Link packages through npm
+
+## Monitoring Points
 1. **Build Logs**
-   - Watch for npm errors
-   - Check directory context
-   - Monitor dependency installation
+   - Watch for builder selection
+   - Monitor repository clone
+   - Check directory structure
 
-2. **Output Verification**
-   - Validate .next directory
-   - Check file permissions
+2. **Configuration**
+   - Verify vercel.json processing
+   - Check builder configuration
+   - Monitor framework detection
+
+3. **Output**
    - Verify build artifacts
-
-3. **Error Patterns**
-   - Track command failures
-   - Monitor exit codes
-   - Log environment state 
+   - Check deployment paths
+   - Monitor routing setup 
