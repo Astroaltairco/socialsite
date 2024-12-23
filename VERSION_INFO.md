@@ -3,27 +3,24 @@
 ## Core Package Versions
 
 ### Package Managers & Build Tools
-- **Yarn**: 4.5.3
-  - Note: Using modern Yarn with PnP (Plug'n'Play)
-  - Some peer dependency warnings are expected, especially with `recharts`
-  - IMPORTANT: Use ONLY Yarn commands (`yarn dev`, `yarn install`, etc.) - do not mix with npm
-  - Root package.json specifies: `"packageManager": "yarn@4.5.3"`
+- **Package Manager**: npm
+  - Note: Switched from Yarn to npm for better Vercel compatibility
   - Common commands:
     ```bash
     # Install dependencies
-    yarn install
+    npm install
 
     # Start development servers
-    yarn dev
+    npm run dev
 
     # Clean project
-    yarn clean
+    npm run clean
 
     # Build project
-    yarn build
+    npm run build
 
     # Run tests
-    yarn test
+    npm run test
     ```
   - Each package has its own clean script to remove:
     - node_modules
@@ -39,17 +36,16 @@
 ### Frontend Frameworks
 - **React**: 18.2.0
 - **React DOM**: 18.2.0
-- **Next.js**: 14.2.21 (landing)
+- **Next.js**: 14.0.4 (landing)
 - **Vite**: 5.4.11 (webapp)
 
 ### Styling & CSS
-- **Tailwind CSS**: 3.4.17
+- **Tailwind CSS**: 3.4.1
   - Standardized across all packages
-  - Previously had version mismatches (3.4.0, 3.3.6)
-- **PostCSS**: 8.4.49
+- **PostCSS**: 8.4.33
   - Standardized across packages
   - Required for proper Tailwind processing
-- **Autoprefixer**: 10.4.20
+- **Autoprefixer**: 10.4.16
   - Standardized across packages
 
 ### Animation & UI
@@ -67,15 +63,12 @@
 ```json
 {
   "dependencies": {
-    "next": "14.2.21",
+    "next": "14.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "framer-motion": "10.16.16"
-  },
-  "devDependencies": {
-    "tailwindcss": "3.4.17",
-    "postcss": "8.4.49",
-    "autoprefixer": "10.4.20"
+    "framer-motion": "10.16.16",
+    "postcss": "8.4.33",
+    "tailwindcss": "3.4.1"
   }
 }
 ```
@@ -90,9 +83,8 @@
     "prop-types": "15.8.1"
   },
   "devDependencies": {
-    "tailwindcss": "3.4.17",
-    "postcss": "8.4.49",
-    "autoprefixer": "10.4.20",
+    "tailwindcss": "3.4.1",
+    "postcss": "8.4.33",
     "vite": "5.4.11"
   }
 }
@@ -100,7 +92,7 @@
 
 ## Known Issues & Learnings
 
-### Package Manager (Yarn)
+### Package Manager (npm)
 1. Peer Dependency Warnings:
    - `recharts` requires `prop-types` as peer dependency
    - Solution: Added `prop-types` to webapp package
@@ -113,7 +105,7 @@
    - Use `lsof -ti:3001,3002 | xargs kill -9` to clear ports
 
 2. Server Persistence:
-   - Both servers should be started together using `yarn dev`
+   - Both servers should be started together using `npm run dev`
    - Individual starts may cause port conflicts
    - Turbo manages concurrent development properly
 
@@ -152,8 +144,8 @@
 
 ## Development Workflow Notes
 
-1. Always run `yarn install` after dependency changes
-2. Use `yarn dev` to start both servers concurrently
+1. Always run `npm install` after dependency changes
+2. Use `npm run dev` to start both servers concurrently
 3. Watch for peer dependency warnings during installation
 4. Keep CSS processing packages in sync across all packages
 5. Monitor port usage for development servers
@@ -161,6 +153,6 @@
 ## Future Considerations
 
 1. Align TypeScript versions across packages
-2. Monitor Yarn 4.x compatibility with all packages
+2. Monitor npm compatibility with all packages
 3. Consider upgrading Vite when 5.5 is released
 4. Keep track of Next.js updates for app router improvements
