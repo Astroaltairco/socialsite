@@ -1,6 +1,5 @@
 {
   "buildCommand": "cd packages/landing && npm ci && npm run build",
   "installCommand": "npm ci",
-  "outputDirectory": "out",
-  "workspaceRoot": "packages/landing"
+  "outputDirectory": "packages/landing/out"
 } 

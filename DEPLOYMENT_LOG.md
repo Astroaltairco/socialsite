@@ -16,89 +16,90 @@
 2. **Build Process Flow**
    ```bash
    1. npm ci                                 # Root installation
-   2. npm run build -w @social-staking/landing # Workspace build
-   3. Next.js builds to 'out' directory      # Build output
+   2. cd packages/landing                    # Navigate to package
+   3. npm ci && npm run build               # Local build
    4. Vercel looks for output               # Path resolution
    ```
 
 3. **Configuration Layers**
-   - Vercel Configuration
+   - Vercel Configuration (Limited by schema)
    - Next.js Configuration
-   - npm Workspace Configuration
    - Build Process Configuration
+   - Directory Structure
 
 ### Root Cause Analysis
 
-1. **Path Duplication**
-   - Vercel adds `packages/landing` prefix
-   - Workspace flag adds another package path
-   - Results in doubled package path
+1. **Vercel Configuration Limitations**
+   - Schema validation restricts available options
+   - No built-in monorepo workspace support in config
+   - Need to work within Vercel's constraints
 
-2. **Workspace Resolution**
-   - npm workspace flag affects path resolution
-   - Vercel's monorepo handling adds complexity
-   - Path resolution happens at multiple levels
+2. **Path Resolution Strategy**
+   - Must handle directory navigation in build command
+   - Output path must be relative to project root
+   - Cannot rely on workspace-aware features
 
 3. **Build Context**
-   - Build runs in workspace context
-   - Output paths relative to workspace
-   - Vercel expects different path structure
+   - Build must run in package directory
+   - Output must be findable from project root
+   - Path resolution must be explicit
 
 ## Attempted Solutions
 
-### Attempt 12 - Output Path Alignment
-- **Changes Made:**
-  - Updated Next.js output configuration
-  - Adjusted Vercel output directory path
-  - Ensured consistent path resolution
-- **Error:** Still seeing duplicated package paths
-- **Analysis:** Path duplication persists despite aligned configuration
-
-### Attempt 13 - Workspace Root Configuration (Current)
+### Attempt 13 - Workspace Root Configuration
 - **Changes Made:**
   - Added explicit `workspaceRoot` in Vercel config
   - Changed to direct directory navigation
   - Simplified output path resolution
-  - Removed workspace flag from build command
+- **Error:** Schema validation failed - invalid property 'workspaceRoot'
+- **Analysis:** Vercel's configuration schema is more restrictive than documented
+
+### Attempt 14 - Explicit Path Resolution (Current)
+- **Changes Made:**
+  - Removed invalid `workspaceRoot` property
+  - Kept direct directory navigation
+  - Using full relative path for output
+  - Simplified configuration to match schema
 - **Status:** In Progress
 - **Reasoning:** 
-  1. `workspaceRoot` tells Vercel where to start
-  2. Direct `cd` avoids workspace path issues
-  3. Simpler output path reduces resolution complexity
+  1. Working within Vercel's schema constraints
+  2. Using explicit paths instead of workspace features
+  3. Maintaining build context through direct navigation
 
 ## Technical Insights
-1. **Path Resolution Layers**
-   - Vercel's base path: `/vercel/path0/`
-   - Workspace resolution: `packages/landing`
-   - Build output: `out`
-   - Each layer can affect final path
+1. **Vercel Configuration Constraints**
+   - Limited set of valid properties
+   - No built-in monorepo support in config
+   - Must use project settings for advanced features
 
-2. **Monorepo Complexity**
-   - Multiple package resolution mechanisms
-   - Competing path resolution strategies
-   - Configuration at multiple levels
+2. **Path Resolution Requirements**
+   - All paths must be relative to project root
+   - Directory navigation must be handled in commands
+   - Output path must be explicitly specified
 
-3. **Build Context Impact**
-   - Working directory affects path resolution
-   - Output paths relative to build context
-   - Need to align all path resolutions
+3. **Build Strategy**
+   - Navigate to package directory first
+   - Run installation and build locally
+   - Output to path that Vercel can find
 
 ## Next Steps if Current Attempt Fails
-1. **Direct Path Strategy**
+1. **Project Settings Approach**
+   - Configure through Vercel's UI
+   - Set root directory in project settings
+   - Remove vercel.json entirely
+
+2. **Build Script Strategy**
    ```bash
-   # Build script approach
-   cd packages/landing && \
-   npm ci && \
-   npm run build && \
+   # Create build.sh
+   #!/bin/bash
+   cd packages/landing
+   npm ci
+   npm run build
+   mkdir -p ../../out
    cp -r out/* ../../out/
    ```
 
-2. **Custom Build Pipeline**
-   - Create custom build script
-   - Handle path resolution explicitly
-   - Manage output copying manually
-
-3. **Repository Split**
-   - Move landing to separate repository
-   - Use standard Next.js deployment
-   - Eliminate monorepo complexity 
+3. **Alternative Structure**
+   - Move landing to repository root
+   - Keep other packages in subdirectory
+   - Use standard Next.js deployment 
