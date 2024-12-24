@@ -5,7 +5,9 @@
       "src": "packages/landing/package.json",
       "use": "@vercel/next",
       "config": {
-        "rootDirectory": "packages/landing"
+        "rootDirectory": "packages/landing",
+        "installCommand": "pnpm install",
+        "buildCommand": "pnpm build"
       }
     }
   ],

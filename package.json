@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "build:landing": "cd packages/landing && npm ci && npm run build",
+    "build:landing": "cd packages/landing && pnpm install && pnpm build",
     "start": "turbo run start",
     "lint": "turbo run lint",
     "test": "turbo run test",
@@ -58,5 +58,6 @@
     "*.{json,md}": [
       "prettier --write"
     ]
-  }
+  },
+  "packageManager": "pnpm@9.15.1+sha512.1acb565e6193efbebda772702950469150cf12bcc764262e7587e71d19dc98a423dff9536e57ea44c49bdf790ff694e83c27be5faa23d67e0c033b583be4bfcf"
 }
