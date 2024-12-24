@@ -2,19 +2,48 @@
 
 ## Root Cause Analysis (Updated)
 
-### Latest Error (Attempt 20)
-- **Error Type:** Maximum call stack size exceeded during build
-- **Location:** During build trace collection
-- **Stack Trace:**
+### Latest Error (Attempt 22)
+- **Error Type:** Directory navigation failure
+- **Location:** During build command execution
+- **Error Message:**
   ```
-  RangeError: Maximum call stack size exceeded
-  at parse (/vercel/path0/node_modules/next/dist/compiled/micromatch/index.js:15:6313)
+  sh: line 1: cd: packages/landing: No such file or directory
   ```
-- **Build Stage:** Failed during Next.js static page generation and trace collection
+- **Build Stage:** Failed during initial build command execution
 - **Analysis:** 
-  - Stack overflow persists in micromatch during build trace collection
-  - Issue occurs after successful static page generation
-  - Problem likely related to complex dependency tree or circular references
+  - Directory structure not available at build time
+  - Working directory might be different in Vercel environment
+  - Need to use absolute paths or Vercel's built-in directory handling
+
+### Attempt 23 - Absolute Path Navigation
+1. Update Vercel config to use Vercel's environment variables:
+   ```json
+   {
+     "version": 2,
+     "framework": null,
+     "buildCommand": "VERCEL_PROJECT_DIR=$VERCEL_ROOT_DIRECTORY/packages/landing && cd $VERCEL_PROJECT_DIR && node debug-build.js && NEXT_DEBUG=true DEBUG='*' NODE_OPTIONS='--trace-warnings' pnpm install && pnpm build",
+     "outputDirectory": "packages/landing/.next",
+     "installCommand": "pnpm install",
+     "env": {
+       "NEXT_DEBUG": "true",
+       "DEBUG": "*",
+       "NODE_ENV": "production",
+       "VERCEL_DEBUG_ENABLED": "true"
+     }
+   }
+   ```
+
+2. Key Changes:
+   - Use Vercel's environment variables for paths
+   - Set explicit project directory
+   - Ensure proper directory navigation
+   - Maintain debug settings
+
+3. Monitoring Points:
+   - Watch for directory navigation errors
+   - Check environment variable availability
+   - Monitor build command execution
+   - Verify working directory context
 
 ### Persistent Error Patterns
 1. **Directory Navigation**
@@ -115,6 +144,35 @@
    - Monitor trace collection phase
    - Check for successful static export
    - Verify output directory structure
+
+### Attempt 22 - Schema Validation Fix
+1. Updated vercel.json configuration:
+   ```json
+   {
+     "version": 2,
+     "framework": null,
+     "buildCommand": "cd packages/landing && node debug-build.js && NEXT_DEBUG=true DEBUG='*' NODE_OPTIONS='--trace-warnings' pnpm install && pnpm build",
+     "outputDirectory": "packages/landing/.next",
+     "installCommand": "pnpm install",
+     "env": {
+       "NEXT_DEBUG": "true",
+       "DEBUG": "*",
+       "NODE_ENV": "production",
+       "VERCEL_DEBUG_ENABLED": "true"
+     }
+   }
+   ```
+
+2. Key Changes:
+   - Changed `framework: false` to `framework: null`
+   - Maintained debug configuration
+   - Kept build and install commands unchanged
+
+3. Monitoring Points:
+   - Schema validation success
+   - Debug script execution
+   - Build process logs
+   - Memory usage tracking
 
 ## Technical Analysis
 
