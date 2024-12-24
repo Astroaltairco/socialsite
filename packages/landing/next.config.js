@@ -2,21 +2,14 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  transpilePackages: ['@social-staking/landing'],
   experimental: {
-    optimizeCss: false,
+    optimizeCss: false
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: true
   },
   output: 'standalone',
-  distDir: '.next',
-  basePath: '',
-  trailingSlash: false,
-  assetPrefix: '',
-  env: {
-    NEXT_PUBLIC_BASE_PATH: ''
-  }
+  distDir: '.next'
 }
 
 module.exports = nextConfig

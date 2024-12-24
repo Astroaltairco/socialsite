@@ -6,8 +6,8 @@
       "src": "packages/landing/package.json",
       "use": "@vercel/next",
       "config": {
-        "buildCommand": "ENABLE_EXPERIMENTAL_COREPACK=1 pnpm install --no-frozen-lockfile && pnpm build",
-        "installCommand": "ENABLE_EXPERIMENTAL_COREPACK=1 pnpm install --no-frozen-lockfile"
+        "buildCommand": "pnpm build",
+        "installCommand": "pnpm install"
       }
     }
   ]

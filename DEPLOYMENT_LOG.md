@@ -2,6 +2,17 @@
 
 ## Root Cause Analysis (Updated)
 
+### Latest Error (Attempt 19)
+- **Error Type:** Maximum call stack size exceeded during build
+- **Location:** During build trace collection
+- **Stack Trace:**
+  ```
+  RangeError: Maximum call stack size exceeded
+  at parse (/vercel/path0/node_modules/next/dist/compiled/micromatch/index.js:15:6313)
+  ```
+- **Build Stage:** Failed during Next.js static page generation
+- **Analysis:** Stack overflow occurring in micromatch during build trace collection
+
 ### Persistent Error Patterns
 1. **Directory Navigation**
    ```
@@ -17,7 +28,7 @@
    - Timing issues with Vercel's build pipeline
 
 3. **Configuration Complexity**
-   - Multiple configuration layers (Vercel, Next.js, npm)
+   - Multiple configuration layers (Vercel, Next.js, pnpm)
    - Monorepo structure adding complexity
    - Build process timing issues
 
@@ -110,8 +121,8 @@
       "src": "packages/landing/package.json",
       "use": "@vercel/next",
       "config": {
-        "installCommand": "npm install",
-        "buildCommand": "npm run build"
+        "installCommand": "pnpm install",
+        "buildCommand": "pnpm build"
       }
     }
   ]
@@ -143,3 +154,46 @@
    - Verify build artifacts
    - Check deployment paths
    - Monitor routing setup 
+
+## Next Steps (Current)
+
+### Attempt 20 - Simplified Next.js Configuration
+1. Update Next.js config to prevent recursion:
+   ```js
+   /** @type {import('next').NextConfig} */
+   const nextConfig = {
+     reactStrictMode: true,
+     swcMinify: true,
+     experimental: {
+       optimizeCss: false
+     },
+     typescript: {
+       ignoreBuildErrors: true
+     },
+     output: 'standalone',
+     distDir: '.next'
+   }
+   ```
+
+2. Update Vercel config to use simpler build process:
+   ```json
+   {
+     "version": 2,
+     "framework": "nextjs",
+     "builds": [
+       {
+         "src": "packages/landing/package.json",
+         "use": "@vercel/next",
+         "config": {
+           "buildCommand": "pnpm build",
+           "installCommand": "pnpm install"
+         }
+       }
+     ]
+   }
+   ```
+
+3. Monitoring Points:
+   - Watch for stack overflow during build trace collection
+   - Monitor memory usage during build
+   - Check for recursive dependencies 
