@@ -1,13 +1,7 @@
 {
   "version": 2,
   "framework": null,
-  "buildCommand": "pwd && ls -la && node debug-build.js && NEXT_DEBUG=true DEBUG='*' NODE_OPTIONS='--trace-warnings' pnpm install && pnpm build",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install",
-  "env": {
-    "NEXT_DEBUG": "true",
-    "DEBUG": "*",
-    "NODE_ENV": "production",
-    "VERCEL_DEBUG_ENABLED": "true"
-  }
+  "buildCommand": "cd packages/landing && pnpm install && pnpm build",
+  "outputDirectory": "packages/landing/.next",
+  "installCommand": "pnpm install"
 } 
