@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "framework": false,
+  "framework": null,
   "buildCommand": "cd packages/landing && node debug-build.js && NEXT_DEBUG=true DEBUG='*' NODE_OPTIONS='--trace-warnings' pnpm install && pnpm build",
   "outputDirectory": "packages/landing/.next",
   "installCommand": "pnpm install",
