@@ -314,3 +314,23 @@
 2024-12-24T00:57:10.323921Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
 2024-12-24T01:01:25.231775Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("vercel.json"), AnchoredSystemPathBuf("packages/landing/next.config.js")}
 2024-12-24T01:01:25.231790Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-12-24T01:01:55.032609Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/landing/next.config.js")}
+2024-12-24T01:01:55.032629Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-12-24T01:02:15.133589Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("")}
+2024-12-24T01:02:15.133622Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({}))
+2024-12-24T01:02:35.634162Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("")}
+2024-12-24T01:02:35.634175Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({}))
+2024-12-24T01:03:17.235212Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("DEPLOYMENT_LOG.md")}
+2024-12-24T01:03:17.235232Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-12-24T01:03:40.335722Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("vercel.json")}
+2024-12-24T01:03:40.335732Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-12-24T01:04:03.937069Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("DEPLOYMENT_LOG.md"), AnchoredSystemPathBuf("vercel.json")}
+2024-12-24T01:04:03.937077Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-12-24T01:05:03.838571Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("DEPLOYMENT_LOG.md")}
+2024-12-24T01:05:03.838585Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-12-24T01:05:16.939624Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/landing/next.config.js")}
+2024-12-24T01:05:16.939637Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-12-24T01:05:29.663813Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("vercel.json")}
+2024-12-24T01:05:29.663829Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-12-24T01:05:47.364152Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("DEPLOYMENT_LOG.md"), AnchoredSystemPathBuf("packages/landing/next.config.js"), AnchoredSystemPathBuf("vercel.json")}
+2024-12-24T01:05:47.364160Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
