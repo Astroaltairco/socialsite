@@ -1,7 +1,7 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "outputDirectory": ".next",
-  "monorepo": true,
-  "workspaceRoot": "packages/landing"
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install",
+  "outputDirectory": ".next"
 } 
