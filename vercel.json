@@ -1,24 +1,6 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "packages/landing/package.json",
-      "use": "@vercel/next",
-      "config": {
-        "rootDirectory": "packages/landing",
-        "installCommand": "pnpm install",
-        "buildCommand": "pnpm build"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/packages/landing/$1",
-      "continue": true
-    },
-    {
-      "handle": "filesystem"
-    }
-  ]
+  "framework": "nextjs",
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install",
+  "outputDirectory": ".next"
 } 
