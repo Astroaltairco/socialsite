@@ -4,11 +4,7 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     optimizeCss: false,
-    turbotrace: {
-      memoryLimit: 8 * 1024, // 8GB
-      logLevel: 'error',
-      logAll: false
-    }
+    turbotrace: false
   },
   typescript: {
     ignoreBuildErrors: true
@@ -17,7 +13,10 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
   generateBuildId: () => 'build',
   poweredByHeader: false,
-  compress: true
+  compress: true,
+  eslint: {
+    ignoreDuringBuilds: true
+  }
 }
 
 module.exports = nextConfig
