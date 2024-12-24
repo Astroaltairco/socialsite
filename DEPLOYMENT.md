@@ -3,7 +3,7 @@
 ## Current Setup
 
 ### Repository Structure
-- Monorepo using Yarn workspaces
+- Monorepo using npm workspaces
 - Main repository: `saskasocial/socialsite`
 - Contains two packages:
   1. `packages/landing` (Next.js landing page)
@@ -19,19 +19,33 @@
 - Project name: "landing"
 - Connected to GitHub repository
 - Auto-deployments enabled on push to `main` branch
-- Build settings in `packages/landing/vercel.json`:
+- Build settings in `vercel.json`:
   ```json
   {
-    "buildCommand": "yarn install && yarn build",
-    "installCommand": "yarn install",
-    "outputDirectory": ".next"
+    "version": 2,
+    "builds": [
+      {
+        "src": "packages/landing/package.json",
+        "use": "@vercel/next",
+        "config": {
+          "rootDirectory": "packages/landing",
+          "projectSettings": {
+            "framework": "nextjs",
+            "buildCommand": "npm run build",
+            "outputDirectory": ".next"
+          }
+        }
+      }
+    ],
+    "rewrites": [
+      { "source": "/(.*)", "destination": "/" }
+    ]
   }
   ```
 
 ### Package Configuration
 - Landing package (`packages/landing/package.json`):
   - Name: `@social-staking/landing`
-  - Build dependencies moved to main dependencies for Vercel
   - Using Next.js 14.0.4
   - Custom port (3001) for development
 
@@ -48,8 +62,8 @@
 
 3. **Build Process**
    - Runs in `packages/landing` directory
-   - Executes `yarn install`
-   - Followed by `yarn build`
+   - Executes `npm install`
+   - Followed by `npm run build`
    - Outputs to `.next` directory
 
 4. **Deployment**
@@ -64,14 +78,12 @@
    - Build process must be independent of root workspace
    - Dependencies must be available in landing package
 
-2. **Memory Issues**
-   - Next.js build occasionally hits memory limits
-   - Stack size exceeded errors during build
-   - Solution: Simplified build configuration
+2. **Routing Issues**
+   - 404 errors due to routing misconfiguration
+   - Solution: Updated routing rules in `vercel.json`
 
 3. **Dependency Management**
-   - Build dependencies moved from devDependencies to dependencies
-   - Required for Vercel's production build
+   - Transitioned from Yarn to npm
    - Ensures all necessary packages are available
 
 ## Future Considerations
@@ -97,7 +109,7 @@ If deployment fails:
 1. Check Vercel build logs
 2. Verify package dependencies
 3. Ensure build commands are correct
-4. Check for memory-related issues
+4. Check for routing-related issues
 5. Verify GitHub permissions
 
 ## Environment Variables
@@ -106,4 +118,4 @@ Required for production:
 
 ## Domains
 - Production: landing-[hash]-saska-socials-projects.vercel.app
-- Custom domain: TBD 
+- Custom domain: staking.socialdao.ai 
