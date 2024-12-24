@@ -2,7 +2,7 @@
 
 ## Root Cause Analysis (Updated)
 
-### Latest Error (Attempt 19)
+### Latest Error (Attempt 20)
 - **Error Type:** Maximum call stack size exceeded during build
 - **Location:** During build trace collection
 - **Stack Trace:**
@@ -10,8 +10,11 @@
   RangeError: Maximum call stack size exceeded
   at parse (/vercel/path0/node_modules/next/dist/compiled/micromatch/index.js:15:6313)
   ```
-- **Build Stage:** Failed during Next.js static page generation
-- **Analysis:** Stack overflow occurring in micromatch during build trace collection
+- **Build Stage:** Failed during Next.js static page generation and trace collection
+- **Analysis:** 
+  - Stack overflow persists in micromatch during build trace collection
+  - Issue occurs after successful static page generation
+  - Problem likely related to complex dependency tree or circular references
 
 ### Persistent Error Patterns
 1. **Directory Navigation**
@@ -68,6 +71,50 @@
   - Used npm commands for build and install
 - **Error:** Directory navigation still failing
 - **Analysis:** Timing and directory structure issues persist
+
+### Attempt 21 - Memory Optimization and Trace Control
+1. Update Next.js config to control trace collection:
+   ```js
+   /** @type {import('next').NextConfig} */
+   const nextConfig = {
+     reactStrictMode: true,
+     swcMinify: true,
+     experimental: {
+       optimizeCss: false,
+       turbotrace: {
+         memoryLimit: 4096
+       }
+     },
+     typescript: {
+       ignoreBuildErrors: true
+     },
+     output: 'export',
+     distDir: '.next'
+   }
+   ```
+
+2. Update Vercel config to use static export:
+   ```json
+   {
+     "version": 2,
+     "framework": false,
+     "buildCommand": "cd packages/landing && pnpm install && pnpm build",
+     "outputDirectory": "packages/landing/.next",
+     "installCommand": "pnpm install"
+   }
+   ```
+
+3. Key Changes:
+   - Switch to static export to avoid complex trace collection
+   - Increase memory limit for turbotrace
+   - Disable framework auto-detection
+   - Simplify build process
+
+4. Monitoring Points:
+   - Watch memory usage during build
+   - Monitor trace collection phase
+   - Check for successful static export
+   - Verify output directory structure
 
 ## Technical Analysis
 
@@ -197,3 +244,22 @@
    - Watch for stack overflow during build trace collection
    - Monitor memory usage during build
    - Check for recursive dependencies 
+
+### Technical Analysis Update
+
+1. **Build Trace Issues**
+   - Micromatch recursion during dependency scanning
+   - Complex monorepo structure causing deep traversal
+   - Memory limits being hit during trace collection
+
+2. **Static Export Benefits**
+   - Simpler build process
+   - No server-side trace collection
+   - Reduced memory requirements
+   - More predictable output
+
+3. **Next Steps if Current Attempt Fails**
+   - Consider splitting the build into smaller chunks
+   - Investigate dependency tree for circular references
+   - Test with reduced feature set to isolate issue
+   - Consider temporary removal of problematic dependencies 

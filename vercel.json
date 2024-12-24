@@ -1,14 +1,13 @@
 {
   "version": 2,
-  "framework": "nextjs",
-  "builds": [
-    {
-      "src": "packages/landing/package.json",
-      "use": "@vercel/next",
-      "config": {
-        "buildCommand": "pnpm build",
-        "installCommand": "pnpm install"
-      }
-    }
-  ]
+  "framework": false,
+  "buildCommand": "cd packages/landing && node debug-build.js && NEXT_DEBUG=true DEBUG='*' NODE_OPTIONS='--trace-warnings' pnpm install && pnpm build",
+  "outputDirectory": "packages/landing/.next",
+  "installCommand": "pnpm install",
+  "env": {
+    "NEXT_DEBUG": "true",
+    "DEBUG": "*",
+    "NODE_ENV": "production",
+    "VERCEL_DEBUG_ENABLED": "true"
+  }
 } 
