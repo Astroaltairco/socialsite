@@ -2,26 +2,26 @@
 
 ## Root Cause Analysis (Updated)
 
-### Latest Error (Attempt 22)
-- **Error Type:** Directory navigation failure
+### Latest Error (Attempt 23)
+- **Error Type:** Directory navigation failure with environment variables
 - **Location:** During build command execution
 - **Error Message:**
   ```
-  sh: line 1: cd: packages/landing: No such file or directory
+  sh: line 1: cd: /packages/landing: No such file or directory
   ```
 - **Build Stage:** Failed during initial build command execution
 - **Analysis:** 
-  - Directory structure not available at build time
-  - Working directory might be different in Vercel environment
-  - Need to use absolute paths or Vercel's built-in directory handling
+  - `$VERCEL_ROOT_DIRECTORY` path might be incorrect
+  - Leading slash in path causing issues
+  - Environment variables might not be expanding as expected
 
-### Attempt 23 - Absolute Path Navigation
-1. Update Vercel config to use Vercel's environment variables:
+### Attempt 24 - Revised Path Navigation
+1. Update Vercel config to use PWD and relative paths:
    ```json
    {
      "version": 2,
      "framework": null,
-     "buildCommand": "VERCEL_PROJECT_DIR=$VERCEL_ROOT_DIRECTORY/packages/landing && cd $VERCEL_PROJECT_DIR && node debug-build.js && NEXT_DEBUG=true DEBUG='*' NODE_OPTIONS='--trace-warnings' pnpm install && pnpm build",
+     "buildCommand": "pwd && ls -la && cd packages/landing && node debug-build.js && NEXT_DEBUG=true DEBUG='*' NODE_OPTIONS='--trace-warnings' pnpm install && pnpm build",
      "outputDirectory": "packages/landing/.next",
      "installCommand": "pnpm install",
      "env": {
@@ -34,16 +34,16 @@
    ```
 
 2. Key Changes:
-   - Use Vercel's environment variables for paths
-   - Set explicit project directory
-   - Ensure proper directory navigation
-   - Maintain debug settings
+   - Remove dependency on `$VERCEL_ROOT_DIRECTORY`
+   - Add `pwd` and `ls` for debugging
+   - Use relative path navigation
+   - Keep debug settings intact
 
 3. Monitoring Points:
-   - Watch for directory navigation errors
-   - Check environment variable availability
-   - Monitor build command execution
-   - Verify working directory context
+   - Check working directory output
+   - Verify directory contents
+   - Monitor path resolution
+   - Track build command execution
 
 ### Persistent Error Patterns
 1. **Directory Navigation**
