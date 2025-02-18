@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion'
 import React, { useRef, useEffect } from 'react'
+import dynamic from "next/dynamic";
+const MindshareTreemap = dynamic(() => import("@jieliu218/mindshare-lib").then(mod => mod.MindshareTreemap), { ssr: false });
 
 const Hero = () => {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -20,10 +22,10 @@ const Hero = () => {
   }
 
   return (
-    <section className="relative pt-80 pb-32 overflow-hidden">
+    <section className="relative pt-10 pb-32 overflow-hidden">
       <div className="relative container mx-auto px-4">
-        <div className="text-center max-w-4xl mx-auto mb-8">
-          <h1 className="text-5xl md:text-6xl font-bold mb-8 tracking-tight">
+        <div className="text-center max-w-4xl mx-auto mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 tracking-tight">
             The Common Currency for{' '}
             <span className="bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
               Social Attention
@@ -60,8 +62,21 @@ const Hero = () => {
               <span className="relative z-10">Learn More</span>
             </motion.a>
           </div>
+          <h3 className="text-3xl md:text-3xl mt-8 tracking-tight">
+            <span className="bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
+             Mindshare
+            </span>
+          </h3>
         </div>
-
+       
+        <div className="w-full h-180 px-2 py-2 md:px-4 pb-10">
+          <MindshareTreemap
+            color={{
+              title: '#fff',
+            }}
+            minHeight={720}
+          />
+        </div>
         <div className="relative max-w-6xl mx-auto mt-4">
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-amber-500/20 blur-3xl -z-10"
